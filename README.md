@@ -62,11 +62,11 @@ L’addiction aux réseaux sociaux est un problème croissant, en particulier ch
 Pour installer YouthGuard, suivez ces étapes :
 1. Clonez le dépôt sur votre machine locale :
    ```bash
-   git clone https://github.com/your-username/YouthGuard.git
+   git clone https://github.com/MasWap/youthguard.git
    ```
 2. Accédez au répertoire du projet :
    ```bash
-   cd YouthGuard
+   cd youthguard
    ```
 3. Chargez l’extension dans votre navigateur :
    - Ouvrez Chrome et allez sur `chrome://extensions/`.
