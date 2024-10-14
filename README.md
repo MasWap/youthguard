@@ -90,4 +90,34 @@ Les contributions de la communauté sont les bienvenues ! Si vous souhaitez part
 
 Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
 
+## Développeur
+
+### Prérequis
+
+Npm, docker
+
+### Commandes à taper pour démarrer la bdd et l'app
+
+Pour démarrer l'application, veuillez lancer les commandes suivantes :
+
+#### Démarrer docker
+
+```bash
+docker-compose up -d
+```
+
+#### Vérifier que les conteneurs tournent
+
+```bash
+docker-compose ps
+```
+
+#### Accéder au repertoir du serveur de base de donnée, installer les packets, et le lancer
+
+```bash
+cd server
+npm install
+node server.js
+```
+
 ---
