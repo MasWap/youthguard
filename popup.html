@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TimeGuard</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.1/dist/tesseract.min.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .container { text-align: center; margin: 20px; }
+    .time-remaining { font-size: 24px; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>TimeGuard</h2>
+    <p>Time remaining today:</p>
+    <div class="time-remaining" id="timeRemaining">Loading...</div>
+    <input type="file" id="idCardUpload" accept="image/*">
+    <div id="birthDate">Birth date will appear here</div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
