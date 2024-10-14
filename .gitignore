@@ -1,2 +1,2 @@
-server/node_modules/
-mysql_data/
+/server/node_modules/
+/mysql_data/

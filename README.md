@@ -94,7 +94,7 @@ Ce projet est sous licence MIT. Consultez le fichier [LICENSE](LICENSE) pour plu
 
 ### Prérequis
 
-Npm, docker
+Npm, docker, docker-compose
 
 ### Commandes à taper pour démarrer la bdd et l'app
 
