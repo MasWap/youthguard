@@ -129,10 +129,19 @@ http://localhost:8081
 #### Générer la table users
 
 ```sql
-CREATE TABLE users (
+CREATE TABLE admins (
   id INT AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE kids (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  birth_date DATE,
+  admin_id INT,
+  FOREIGN KEY (admin_id) REFERENCES admins(id)
 );
 ```
 
