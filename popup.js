@@ -12,32 +12,11 @@ function initTesseract() {
 
 document.addEventListener('DOMContentLoaded', initTesseract);
 
-function updateTimeDisplay() {
-  chrome.storage.local.get(['timeSpent'], (result) => {
-    if (result.timeSpent) {
-      const totalTime = Object.values(result.timeSpent).reduce((a, b) => a + b, 0);
-      const remainingTime = MAX_TIME - totalTime;
-      document.getElementById('timeRemaining').textContent = formatTime(Math.max(0, remainingTime / 1000));
-    }
-  });
+function resetPopupState() {
+  chrome.storage.local.set({ popupOpen: false });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  updateTimeDisplay();
-  setInterval(updateTimeDisplay, 1000);
-});
-
-chrome.runtime.sendMessage({action: "getTime"}, (response) => {
-  if (response && response.timeSpent) {
-    updateTimeDisplay(response.timeSpent);
-  }
-});
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "updateTime") {
-    updateTimeDisplay(request.timeSpent);
-  }
-});
+window.addEventListener('unload', resetPopupState);
 
 function formatTime(seconds) {
   const hours = Math.floor(seconds / 3600);
@@ -46,47 +25,61 @@ function formatTime(seconds) {
   return `${hours}h ${minutes}m ${secs}s`;
 }
 
+async function checkCanRegister() {
+  try {
+    const response = await fetch('http://localhost:3000/can-register');
+    const data = await response.json();
+    return data.canRegister;
+  } catch (error) {
+    console.error('Error checking registration status:', error);
+    return false;
+  }
+}
+
 function updateUIBasedOnLoginStatus(isLoggedIn) {
   console.log('Updating UI, isLoggedIn:', isLoggedIn);
-  const timeRemainingElement = document.getElementById('timeRemaining');
-  const timeRemainingLabel = document.getElementById('timeRemainingLabel');
-  const loginPrompt = document.getElementById('loginPrompt');
-  const idCardUploadElement = document.getElementById('idCardUpload');
-  const birthDateElement = document.getElementById('birthDate');
-  const loginButton = document.getElementById('loginButton');
-  const registerButton = document.getElementById('registerButton');
+  const loginForm = document.getElementById('loginForm');
   const logoutButton = document.getElementById('logoutButton');
   const showUsersButton = document.getElementById('showUsersButton');
   const userListElement = document.getElementById('userList');
+  const registerButton = document.getElementById('registerButton');
 
   if (isLoggedIn) {
-    timeRemainingElement.style.display = 'block';
-    timeRemainingLabel.style.display = 'block';
-    loginPrompt.style.display = 'none';
-    idCardUploadElement.style.display = 'block';
-    birthDateElement.style.display = 'block';
-    loginButton.style.display = 'none';
-    registerButton.style.display = 'none';
+    loginForm.style.display = 'none';
     logoutButton.style.display = 'block';
     showUsersButton.style.display = 'block';
+    document.getElementById('loginStatus').textContent = "Connecté en tant que " + getUsername();
   } else {
-    timeRemainingElement.style.display = 'none';
-    timeRemainingLabel.style.display = 'none';
-    loginPrompt.style.display = 'block';
-    idCardUploadElement.style.display = 'none';
-    birthDateElement.style.display = 'none';
-    loginButton.style.display = 'block';
-    registerButton.style.display = 'block';
+    loginForm.style.display = 'block';
     logoutButton.style.display = 'none';
     showUsersButton.style.display = 'none';
     userListElement.style.display = 'none';
     userListElement.innerHTML = '';
+    document.getElementById('loginStatus').textContent = "Non connecté";
+    
+    // Vérifier si l'inscription est possible
+    checkCanRegister().then(canRegister => {
+      registerButton.style.display = canRegister ? 'inline-block' : 'none';
+    });
   }
 }
 
+async function getUsername() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['username'], (result) => {
+      resolve(result.username || '');
+    });
+  });
+}
+
 document.getElementById('loginButton').addEventListener('click', async () => {
-  const username = prompt("Enter your username:");
-  const password = prompt("Enter your password:");
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  if (!username || !password) {
+    alert("Veuillez entrer un nom d'utilisateur et un mot de passe.");
+    return;
+  }
 
   try {
     const response = await fetch('http://localhost:3000/login', {
@@ -98,23 +91,27 @@ document.getElementById('loginButton').addEventListener('click', async () => {
     const data = await response.json();
 
     if (data.success) {
-      document.getElementById('loginStatus').textContent = "Logged in as " + data.user.username;
-      chrome.storage.local.set({ isLoggedIn: true, username: data.user.username });
-      updateUIBasedOnLoginStatus(true);
+      chrome.storage.local.set({ isLoggedIn: true, username: data.user.username }, () => {
+        updateUIBasedOnLoginStatus(true);
+      });
     } else {
-      document.getElementById('loginStatus').textContent = "Login failed: " + data.message;
-      chrome.storage.local.set({ isLoggedIn: false, username: null });
+      document.getElementById('loginStatus').textContent = "Échec de la connexion : " + data.message;
       updateUIBasedOnLoginStatus(false);
     }
   } catch (error) {
-    console.error('Login error:', error);
-    document.getElementById('loginStatus').textContent = "Login failed: Server error";
-    chrome.storage.local.set({ isLoggedIn: false, username: null });
+    console.error('Erreur de connexion :', error);
+    document.getElementById('loginStatus').textContent = "Échec de la connexion : Erreur serveur";
     updateUIBasedOnLoginStatus(false);
   }
 });
 
 document.getElementById('registerButton').addEventListener('click', async () => {
+  const canRegister = await checkCanRegister();
+  if (!canRegister) {
+    alert("L'enregistrement est fermé. Un seul compte est autorisé.");
+    return;
+  }
+
   const username = prompt("Enter your username:");
   const password = prompt("Enter your password:");
 
@@ -134,15 +131,17 @@ document.getElementById('registerButton').addEventListener('click', async () => 
     } else {
       if (response.status === 409) {
         document.getElementById('loginStatus').textContent = "Erreur d'inscription: Utilisateur déjà existant";
+      } else if (response.status === 403) {
+        document.getElementById('loginStatus').textContent = "Erreur d'inscription: L'enregistrement est fermé";
       } else {
-        document.getElementById('loginStatus').textContent = "Registration failed: " + data.message;
+        document.getElementById('loginStatus').textContent = "Erreur d'inscription: " + data.message;
       }
       chrome.storage.local.set({ isLoggedIn: false, username: null });
       updateUIBasedOnLoginStatus(false);
     }
   } catch (error) {
     console.error('Register error:', error);
-    document.getElementById('loginStatus').textContent = "Registration failed: Server error";
+    document.getElementById('loginStatus').textContent = "Erreur d'inscription: Erreur serveur";
     chrome.storage.local.set({ isLoggedIn: false, username: null });
     updateUIBasedOnLoginStatus(false);
   }
@@ -154,10 +153,7 @@ function logout() {
   fetch('http://localhost:3000/logout', { method: 'POST' })
     .then(() => {
       console.log('Logout successful');
-      document.getElementById('loginStatus').textContent = "Logged out";
-      document.getElementById('userList').innerHTML = '';
       chrome.storage.local.set({ isLoggedIn: false, username: null }, () => {
-        console.log('Chrome storage updated');
         updateUIBasedOnLoginStatus(false);
       });
     })
@@ -232,12 +228,16 @@ document.getElementById('showUsersButton').addEventListener('click', displayUser
 document.getElementById('logoutButton').addEventListener('click', logout);
 
 // Vérification de l'état de connexion lors de l'ouverture du popup
-chrome.storage.local.get(['isLoggedIn', 'username'], (result) => {
-  if (result.isLoggedIn) {
-    document.getElementById('loginStatus').textContent = "Logged in as " + result.username;
-    updateUIBasedOnLoginStatus(true);
-  } else {
-    document.getElementById('loginStatus').textContent = "Not logged in";
-    updateUIBasedOnLoginStatus(false);
-  }
+document.addEventListener('DOMContentLoaded', () => {
+  chrome.storage.local.get(['isLoggedIn', 'popupOpen'], (result) => {
+    chrome.storage.local.set({ popupOpen: true });
+    if (result.popupOpen === false) {
+      // La popup a été fermée, on réinitialise l'état de connexion
+      chrome.storage.local.set({ isLoggedIn: false });
+      updateUIBasedOnLoginStatus(false);
+    } else {
+      // La popup était déjà ouverte, on conserve l'état de connexion
+      updateUIBasedOnLoginStatus(result.isLoggedIn);
+    }
+  });
 });

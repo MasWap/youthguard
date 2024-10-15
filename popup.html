@@ -5,24 +5,30 @@
   <style>
     body { font-family: Arial, sans-serif; }
     .container { text-align: center; margin: 20px; }
-    .time-remaining { font-size: 24px; color: #333; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 5px; }
+    .btn { padding: 5px 10px; cursor: pointer; }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>TimeGuard</h2>
-    <p id="timeRemainingLabel">Temps restant :</p>
-    <div class="time-remaining" id="timeRemaining"></div>
-    <div id="loginPrompt" style="display:none; color: red;">Connectez-vous</div>
-    
-    <button id="loginButton">Connexion</button>
-    <button id="registerButton">Inscription</button>
-    <button id="logoutButton" style="display:none;">Deconnexion</button>
-    <div id="loginStatus">Non connecter</div>
-    <input type="file" id="idCardUpload" accept="image/*" style="display:none;">
-    <div id="birthDate">Birth date will appear here</div>
-
-    <button id="showUsersButton" style="display:none;">Afficher les utilisateurs</button>
+    <p id="loginStatus"></p>
+    <div id="loginForm">
+      <div class="form-group">
+        <label for="username">Nom d'utilisateur:</label>
+        <input type="text" id="username" name="username">
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe:</label>
+        <input type="password" id="password" name="password">
+      </div>
+      <button id="loginButton" class="btn">Se connecter</button>
+      <button id="registerButton" class="btn" style="display:none;">S'inscrire</button>
+    </div>
+    <button id="logoutButton" class="btn" style="display:none;">Se déconnecter</button>
+    <button id="showUsersButton" class="btn" style="display:none;">Afficher les administrateurs</button>
     <div id="userList" style="display:none;"></div>
 
   </div>
