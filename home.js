@@ -1,3 +1,5 @@
+console.log("Le script home.js est chargé.");
+
 // Affichage de la modale pour ajouter un profil
 const modal = document.getElementById('profileModal');
 const addProfileBtn = document.getElementById('addProfile');
@@ -8,8 +10,10 @@ const newProfileInput = document.getElementById('newProfileName');
 
 addProfileBtn.addEventListener('click', function() {
   modal.style.display = 'block';
+  
 });
 
+  
 closeBtn.addEventListener('click', function() {
   modal.style.display = 'none';
 });
