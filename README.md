@@ -120,4 +120,30 @@ npm install
 node server.js
 ```
 
+#### Accès à l'interface de base de données
+
+```bash
+http://localhost:8081
+```
+
+#### Générer la table users
+
+```sql
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+```
+
+#### Insérer les utilisateurs
+
+```sql
+USE timeguard;
+
+INSERT INTO users (username, password) VALUES
+('lilian', 'toto'),
+('louis', 'toto');
+```
+
 ---

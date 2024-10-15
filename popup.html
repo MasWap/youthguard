@@ -11,12 +11,20 @@
 <body>
   <div class="container">
     <h2>TimeGuard</h2>
-    <p>Time remaining today:</p>
-    <div class="time-remaining" id="timeRemaining">Loading...</div>
-    <button id="loginButton">Login</button>
-    <div id="loginStatus">Not logged in</div>
-    <input type="file" id="idCardUpload" accept="image/*">
+    <p id="timeRemainingLabel">Temps restant :</p>
+    <div class="time-remaining" id="timeRemaining"></div>
+    <div id="loginPrompt" style="display:none; color: red;">Connectez-vous</div>
+    
+    <button id="loginButton">Connexion</button>
+    <button id="registerButton">Inscription</button>
+    <button id="logoutButton" style="display:none;">Deconnexion</button>
+    <div id="loginStatus">Non connecter</div>
+    <input type="file" id="idCardUpload" accept="image/*" style="display:none;">
     <div id="birthDate">Birth date will appear here</div>
+
+    <button id="showUsersButton" style="display:none;">Afficher les utilisateurs</button>
+    <div id="userList" style="display:none;"></div>
+
   </div>
   <script src="js/tesseract.min.js"></script>
   <script src="popup.js"></script>
