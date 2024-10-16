@@ -1,8 +1,0 @@
-# Ignorer le dossier node_modules à la racine
-node_modules/
-
-# Ignorer le dossier node_modules dans le dossier server
-server/node_modules/
-
-# Ignorer le dossier mysql_data à la racine
-mysql_data/

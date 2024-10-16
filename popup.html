@@ -1,38 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>TimeGuard</title>
+  <meta charset="UTF-8">
+  <title>Instagram Filter</title>
   <style>
-    body { font-family: Arial, sans-serif; }
-    .container { text-align: center; margin: 20px; }
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; margin-bottom: 5px; }
-    .form-group input { width: 100%; padding: 5px; }
-    .btn { padding: 5px 10px; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>TimeGuard</h2>
-    <p id="loginStatus"></p>
-    <div id="loginForm">
-      <div class="form-group">
-        <label for="username">Nom d'utilisateur:</label>
-        <input type="text" id="username" name="username">
-      </div>
-      <div class="form-group">
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="password" name="password">
-      </div>
-      <button id="loginButton" class="btn">Se connecter</button>
-      <button id="registerButton" class="btn" style="display:none;">S'inscrire</button>
-    </div>
-    <button id="logoutButton" class="btn" style="display:none;">Se déconnecter</button>
-    <button id="showUsersButton" class="btn" style="display:none;">Afficher les administrateurs</button>
-    <div id="userList" style="display:none;"></div>
+  <h3>Mots bannis</h3>
+  <input type="text" id="newWord" placeholder="Ajouter un mot">
+  <button id="addWordBtn">Ajouter</button>
+  <ul id="bannedWordsList"></ul>
 
-  </div>
-  <script src="js/tesseract.min.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>
