@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Gère le retour à la page d'accueil
   fetchTags();
   document.getElementById('backToHome').addEventListener('click', function() {
-    window.location.href = "login.html";
+    window.location.href = "home.html";
   });
 
   // Gère la suppression du profil

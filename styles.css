@@ -468,3 +468,26 @@ input:checked+.slider:before {
   font-size: 14px;
   /* Ajuster la taille de la police si nécessaire */
 }
+
+.container-blocked {
+  display: flex;
+  flex-direction: column;  /* Aligne les éléments verticalement (logo au-dessus du texte) */
+  justify-content: center; /* Centre verticalement */
+  align-items: center;     /* Centre horizontalement */
+  height: 100vh;           /* Occupe toute la hauteur de la fenêtre */
+}
+
+/* Style pour le logo */
+.centered-image {
+  width: 150px;            /* Taille du logo (ajuste si nécessaire) */
+  height: auto;
+  margin-bottom: 20px;     /* Espace entre le logo et le texte */
+}
+
+/* Style pour le texte */
+.centered-title {
+  font-size: 50px;         /* Taille du texte */
+  text-align: center;      /* Centre le texte horizontalement */
+  color: #333;             /* Couleur du texte */
+  font-weight: bold;       /* Texte en gras */
+}
