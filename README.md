@@ -1,35 +1,35 @@
 ![Logo](images/logo.png)
 
-# YouthGuard - Extension de Navigateur Anti-Addiction
+# YouthGuard - Extension de Navigateur Anti-Addiction et Anti-Contenu Inapproprié
 
-**YouthGuard** est une extension de navigateur conçue pour aider les utilisateurs à réguler leur utilisation des réseaux sociaux et à prévenir l’addiction. Elle inclut des fonctionnalités de vérification d’identité sécurisée, de gestion du temps d’écran, ainsi qu’une modération automatisée des contenus pour favoriser un usage sain, notamment chez les jeunes.
+**YouthGuard** est une extension de navigateur conçue pour aider les utilisateurs à réguler leur utilisation des réseaux sociaux et à prévenir l’addiction. Elle inclut des fonctionnalités de gestion du temps d’écran, ainsi qu’une modération automatisée des contenus pour favoriser un usage sain, notamment chez les jeunes, à la manière d'un contrôle parental.
 
 ## Table des matières
 1. [Introduction](#introduction)
 2. [Fonctionnalités principales](#fonctionnalités-principales)
-   - [Vérification d'identité](#vérification-didentité)
    - [Régulation du temps d'écran](#régulation-du-temps-décran)
-   - [Restrictions adaptées à l'âge](#restrictions-adaptées-à-lâge)
    - [Blocage automatique](#blocage-automatique)
 3. [Étapes de développement](#étapes-de-développement)
 4. [Installation](#installation)
 5. [Utilisation](#utilisation)
-6. [Contribuer](#contribuer)
+6. [Développeur](#développeur)
+   - [Prérequis](#prérequis)
+   - [Commandes à taper pour démarrer la bdd et l'app](#commandes-à-taper-pour-démarrer-la-bdd-et-lapp)
 7. [Licence](#licence)
 
 ## Introduction
 
-L’addiction aux réseaux sociaux est un problème croissant, en particulier chez les jeunes. **YouthGuard** vise à aider les utilisateurs à contrôler leur temps d’écran, à garantir une expérience en ligne sécurisée et à prévenir l'exposition à des contenus dangereux. Ce projet comprend plusieurs modules, la limitation du temps d'utilisation et la modération automatisée, afin de favoriser le bien-être numérique des utilisateurs.
+L’addiction aux réseaux sociaux et le contenu inapproprié  sont un problème croissant, en particulier chez les jeunes. **YouthGuard** vise à aider les enfants à contrôler leur temps d’écran, à garantir une expérience en ligne sécurisée et à prévenir l'exposition à des contenus dangereux. Ce projet comprend plusieurs modules, la limitation du temps d'utilisation et la modération automatisée, afin de favoriser le bien-être numérique des enfants.
 
 ## Fonctionnalités principales
 
 ### Régulation du temps d'écran
 - **Limite quotidienne d’utilisation** : L’accès aux réseaux sociaux est limité en fonction du temps définit par le parent.
 - **Suivi des sites visités** : L’extension surveille le temps passé sur les réseaux sociaux populaires tels que Facebook, Instagram et TikTok.
-- **Alertes avant blocage** : Une notification prévient l’utilisateur lorsque la limite de temps approche, et l’accès est bloqué une fois la limite atteinte.
+- **Bloquage du site** : Après la limite de temps dépassé, le site en question est bloqué et l'accès y est impossible.
 
 ### Blocage automatique
-- **Blocage après dépassement de la limite** : Une fois le temps d’écran quotidien atteint, l’accès aux réseaux sociaux est bloqué.
+- **Blocage automatique du texte inapproprié** : Une fois le texte inapproprié détecté, il est masqué et est donc invisible par l'enfant.
 
 ## Étapes de développement
 
@@ -38,11 +38,15 @@ L’addiction aux réseaux sociaux est un problème croissant, en particulier ch
    - Surveiller le temps passé sur chaque plateforme via les API du navigateur.
 
 2. **Gestion du temps d’écran**
-   - Utiliser le stockage local (`localStorage`) pour suivre et enregistrer le temps d’utilisation quotidien.
+   - Utiliser le stockage local (`localStorage`) et la base de données pour suivre et enregistrer le temps d’utilisation quotidien.
    - Développer une interface utilisateur minimaliste qui affiche le temps restant et envoie des notifications avant que la limite ne soit atteinte.
 
 3. **Blocage d'accès**
    - Rediriger l’utilisateur vers une page de notification expliquant que son temps d’écran est écoulé lorsqu'il atteint la limite quotidienne.
+
+4. **Filtrage de contenu**
+   - Utiliser une API de détection de contenu inapproprié pour filtrer les messages et les commentaires sur les réseaux sociaux.
+   - Masquer automatiquement les messages contenant des mots-clés sensibles.
 
 ## Installation
 
@@ -102,7 +106,7 @@ node server.js
 http://localhost:8081
 ```
 
-#### Générer la table users
+#### Générer la table users via le script SQL suivant
 
 ```sql
 -- Création de la table des administrateurs
