@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Instagram Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Mots bannis</h3>
+  <input type="text" id="newWord" placeholder="Ajouter un mot">
+  <button id="addWordBtn">Ajouter</button>
+  <ul id="bannedWordsList"></ul>
+
+  <script src="popup.js"></script>
+</body>
+</html>
