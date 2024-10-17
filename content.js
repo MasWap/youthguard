@@ -120,33 +120,96 @@ async function getBannedTags() {
     }
   }
   
-  // Fonction pour filtrer les posts en fonction des mots interdits
-  async function filterInstagramPosts() {
+// Fonction principale pour récupérer les mots bannis et filtrer les posts en fonction de la plateforme
+async function filterPosts() {
     const bannedTags = await getBannedTags(); // Récupérer les mots bannis
-    // console.log(`Mots bannis récupérés : ${bannedTags.join(', ')}`);
+    console.log(`Mots bannis récupérés : ${bannedTags.join(', ')}`);
 
+    const platform = detectPlatform(); // Détecter la plateforme actuelle
+
+    if (platform === 'instagram') {
+        filterInstagramPosts(bannedTags);
+    } else if (platform === 'facebook') {
+        filterFacebookPosts(bannedTags);
+    } else if (platform === 'tiktok') {
+        filterTiktokPosts(bannedTags);
+    }
+}
+
+// Détecter la plateforme actuelle (basé sur l'URL du site)
+function detectPlatform() {
+    const url = window.location.href;
+    if (url.includes('instagram.com')) {
+        return 'instagram';
+    } else if (url.includes('facebook.com')) {
+        return 'facebook';
+    } else if (url.includes('tiktok.com')) {
+        return 'tiktok';
+    }
+    return null;
+}
+
+// Filtrer les posts Instagram
+function filterInstagramPosts(bannedTags) {
     const posts = document.querySelectorAll('article'); // Sélection des posts Instagram
-  
+
     posts.forEach(post => {
-      const description = post.innerText.toLowerCase(); // Récupérer le texte (description) du post
-  
-      // Vérifier si la description contient un mot banni
-      const containsBannedWord = bannedTags.some(tag => description.includes(tag.toLowerCase()));
-  
-      if (containsBannedWord) {
-        console.log(`Post contenant un mot banni trouvé : ${description}`);
-        post.style.visibility = 'hidden'; // Masquer le post si un mot banni est trouvé
-      }
+        const description = post.innerText.toLowerCase(); // Récupérer le texte (description) du post
+
+        // Vérifier si la description contient un mot banni
+        bannedTags.forEach(tag => {
+            if (description.includes(tag.toLowerCase())) {
+                console.log(`Post contenant un mot banni trouvé (Instagram) : ${description}`);
+                console.log(`Mot banni : ${tag}`);
+                post.style.visibility = 'hidden'; // Masquer le post
+            }
+        });
     });
-  }
-  
-  // Écouter les événements de scroll pour vérifier les nouveaux posts qui apparaissent
-  window.addEventListener('scroll', function() {
-    filterInstagramPosts(); // Filtrer les nouveaux posts qui apparaissent lors du scroll
-  });
-  
+}
+
+// Filtrer les posts Facebook
+function filterFacebookPosts(bannedTags) {
+    const posts = document.querySelectorAll('div[role="article"]'); // Sélection des posts Facebook (balise <div> avec role="article")
+
+    posts.forEach(post => {
+        const description = post.innerText.toLowerCase(); // Récupérer le texte (description) du post
+
+        // Vérifier si la description contient un mot banni
+        bannedTags.forEach(tag => {
+            if (description.includes(tag.toLowerCase())) {
+                console.log(`Post contenant un mot banni trouvé (Facebook) : ${description}`);
+                console.log(`Mot banni : ${tag}`);
+                post.style.visibility = 'hidden'; // Masquer le post
+            }
+        });
+    });
+}
+
+// Filtrer les posts TikTok
+function filterTiktokPosts(bannedTags) {
+    const posts = document.querySelectorAll('div[data-e2e="video"]'); // Sélection des posts TikTok (balise <div> avec data-e2e="video")
+
+    posts.forEach(post => {
+        const description = post.innerText.toLowerCase(); // Récupérer le texte (description) du post
+
+        // Vérifier si la description contient un mot banni
+        bannedTags.forEach(tag => {
+            if (description.includes(tag.toLowerCase())) {
+                console.log(`Post contenant un mot banni trouvé (TikTok) : ${description}`);
+                console.log(`Mot banni : ${tag}`);
+                post.style.visibility = 'hidden'; // Masquer le post
+            }
+        });
+    });
+}
+
+// Écouter les événements de scroll pour vérifier les nouveaux posts qui apparaissent
+window.addEventListener('scroll', function() {
+    filterPosts(); // Filtrer les nouveaux posts qui apparaissent lors du scroll
+});
+
 // Filtrer immédiatement les posts à l'ouverture de la page
-filterInstagramPosts();  
+filterPosts();
 createTimerElement();
 createBlockElement();
 createResetButton();
