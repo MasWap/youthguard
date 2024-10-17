@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+   <head>
+      <meta charset="utf-8">
+      <title>Formulaire de Connexion | Parental Control</title>
+      <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+      <div class="wrapper">
+         <div class="title">
+            Connexion
+         </div>
+         <form id="loginForm">
+            <div class="field">
+               <input type="text" id="username" required>
+               <label>Nom d'utilisateur</label>
+            </div>
+            <div class="field">
+               <input type="password" id="password" required>
+               <label>Mot de passe</label>
+            </div>
+            <div class="field">
+               <input type="submit" value="Connexion">
+            </div>
+            <div id="registerButtonContainer" style="display:none;">
+               <div class="field">
+                  <input type="button" id="registerButton" value="S'inscrire">
+               </div>
+            </div>
+            <p id="loginStatus"></p>
+         </form>
+      </div>
+      <script src="js/tesseract.min.js"></script>
+      <script src="login.js"></script>
+   </body>
+</html>
