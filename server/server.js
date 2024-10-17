@@ -313,6 +313,33 @@ app.delete('/tags/:id', async (req, res) => {
   }
 });
 
+app.get('/active-kid-tags', async (req, res) => {
+  try {
+    // Récupérer l'enfant actif
+    const [activeKid] = await pool.query('SELECT id FROM kids WHERE is_active = 1 LIMIT 1');
+    if (activeKid.length === 0) {
+      return res.status(404).json({ success: false, message: 'Aucun enfant actif trouvé' });
+    }
+
+    const kidId = activeKid[0].id;
+
+    // Récupérer les tags associés à cet enfant
+    const [tags] = await pool.query(`
+      SELECT t.libelle 
+      FROM kids_tags kt 
+      JOIN tags t ON kt.tag_id = t.id 
+      WHERE kt.kid_id = ?`, [kidId]);
+
+    // Extraire les libellés des tags
+    const bannedTags = tags.map(tag => tag.libelle);
+
+    res.json({ success: true, bannedTags });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des tags de l\'enfant actif:', error);
+    res.status(500).json({ success: false, message: 'Erreur serveur' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

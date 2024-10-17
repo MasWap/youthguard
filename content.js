@@ -101,6 +101,53 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// Fonction pour récupérer les mots bannis (tags) de l'enfant actif
+async function getBannedTags() {
+    try {
+      const response = await fetch('http://localhost:3000/active-kid-tags');
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log("Tags récupérés de l'enfant actif:", data.bannedTags);
+        return data.bannedTags;
+      } else {
+        console.error("Erreur lors de la récupération des tags:", data.message);
+        return [];
+      }
+    } catch (error) {
+      console.error("Erreur lors de la requête pour récupérer les tags:", error);
+      return [];
+    }
+  }
+  
+  // Fonction pour filtrer les posts en fonction des mots interdits
+  async function filterInstagramPosts() {
+    const bannedTags = await getBannedTags(); // Récupérer les mots bannis
+  
+    const posts = document.querySelectorAll('article'); // Sélection des posts Instagram
+    console.log(`Nombre de posts trouvés : ${posts.length}`);
+  
+    posts.forEach(post => {
+      const description = post.innerText.toLowerCase(); // Récupérer le texte (description) du post
+  
+      // Vérifier si la description contient un mot banni
+      const containsBannedWord = bannedTags.some(tag => description.includes(tag.toLowerCase()));
+  
+      if (containsBannedWord) {
+        console.log(`Post contenant un mot banni trouvé : ${description}`);
+        post.style.display = 'none'; // Masquer le post si un mot banni est trouvé
+      }
+    });
+  }
+  
+  // Écouter les événements de scroll pour vérifier les nouveaux posts qui apparaissent
+  window.addEventListener('scroll', function() {
+    console.log("Scroll détecté. Vérification des nouveaux posts...");
+    filterInstagramPosts(); // Filtrer les nouveaux posts qui apparaissent lors du scroll
+  });
+  
+// Filtrer immédiatement les posts à l'ouverture de la page
+filterInstagramPosts();  
 createTimerElement();
 createBlockElement();
 createResetButton();
