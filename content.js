@@ -121,6 +121,7 @@ async function getBannedTags() {
   }
   
 // Fonction principale pour récupérer les mots bannis et filtrer les posts en fonction de la plateforme
+// Fonction principale pour récupérer les mots bannis et filtrer les posts en fonction de la plateforme
 async function filterPosts() {
     const bannedTags = await getBannedTags(); // Récupérer les mots bannis
     console.log(`Mots bannis récupérés : ${bannedTags.join(', ')}`);
@@ -149,6 +150,29 @@ function detectPlatform() {
     return null;
 }
 
+// Fonction pour masquer la publication avec un fond gris et un texte
+function blockPost(post) {
+    post.style.position = 'relative'; // S'assurer que le post est positionné relativement pour l'overlay
+
+    // Créer un div qui recouvre le post avec le fond gris et le message
+    const blockOverlay = document.createElement('div');
+    blockOverlay.style.position = 'absolute';
+    blockOverlay.style.top = '0';
+    blockOverlay.style.left = '0';
+    blockOverlay.style.width = '100%';
+    blockOverlay.style.height = '100%';
+    blockOverlay.style.backgroundColor = 'rgba(128, 128, 128, 0.8)'; // Fond gris avec opacité
+    blockOverlay.style.display = 'flex';
+    blockOverlay.style.alignItems = 'center';
+    blockOverlay.style.justifyContent = 'center';
+    blockOverlay.style.color = 'white';
+    blockOverlay.style.fontSize = '20px';
+    blockOverlay.style.fontWeight = 'bold';
+    blockOverlay.innerText = 'Publication bloquée';
+
+    post.appendChild(blockOverlay); // Ajouter le bloc par-dessus la publication
+}
+
 // Filtrer les posts Instagram
 function filterInstagramPosts(bannedTags) {
     const posts = document.querySelectorAll('article'); // Sélection des posts Instagram
@@ -161,7 +185,7 @@ function filterInstagramPosts(bannedTags) {
             if (description.includes(tag.toLowerCase())) {
                 console.log(`Post contenant un mot banni trouvé (Instagram) : ${description}`);
                 console.log(`Mot banni : ${tag}`);
-                post.style.visibility = 'hidden'; // Masquer le post
+                blockPost(post); // Appeler la fonction pour bloquer le post
             }
         });
     });
@@ -179,7 +203,7 @@ function filterFacebookPosts(bannedTags) {
             if (description.includes(tag.toLowerCase())) {
                 console.log(`Post contenant un mot banni trouvé (Facebook) : ${description}`);
                 console.log(`Mot banni : ${tag}`);
-                post.style.visibility = 'hidden'; // Masquer le post
+                blockPost(post); // Appeler la fonction pour bloquer le post
             }
         });
     });
@@ -197,7 +221,7 @@ function filterTiktokPosts(bannedTags) {
             if (description.includes(tag.toLowerCase())) {
                 console.log(`Post contenant un mot banni trouvé (TikTok) : ${description}`);
                 console.log(`Mot banni : ${tag}`);
-                post.style.visibility = 'hidden'; // Masquer le post
+                blockPost(post); // Appeler la fonction pour bloquer le post
             }
         });
     });
@@ -210,6 +234,7 @@ window.addEventListener('scroll', function() {
 
 // Filtrer immédiatement les posts à l'ouverture de la page
 filterPosts();
+
 createTimerElement();
 createBlockElement();
 createResetButton();
