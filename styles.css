@@ -10,7 +10,6 @@
 html,
 body {
   width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,6 +146,7 @@ form .signup-link a:hover {
 
 .container {
   width: 400px;
+  height: 100%;
   background: #fff;
   border-radius: 15px;
   padding: 20px;
@@ -281,14 +281,14 @@ form .signup-link a:hover {
 }
 
 
-.close-btn {
+.close-kid-btn {
   float: right;
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
 }
 
-.close-btn:hover {
+.close-kid-btn:hover {
   color: red;
 }
 
@@ -305,25 +305,25 @@ form .signup-link a:hover {
   cursor: pointer;
 }
 
-#saveProfile {
+#saveKid {
   background-color: #4158d0;
   color: white;
 }
 
-#saveProfile:hover {
+#saveKid:hover {
   background-color: #354ab8;
 }
 
-#cancelProfile {
+#cancelKid {
   background-color: #ccc;
   color: black;
 }
 
-#cancelProfile:hover {
+#cancelKid:hover {
   background-color: #bbb;
 }
 
-#newProfileName {
+#newKidName {
   width: 100%;
   padding: 10px;
   margin-top: 20px;

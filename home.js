@@ -11,7 +11,7 @@ function checkLoginStatus() {
 
 // Affichage de la modale pour ajouter un enfant
 const kidModal = document.getElementById('kidModal');
-const addKidBtn = document.getElementById('addKid');
+const addKidBtn = document.getElementById('addProfile');
 const closeKidBtn = document.querySelector('.close-kid-btn');
 const saveKidBtn = document.getElementById('saveKid');
 const cancelKidBtn = document.getElementById('cancelKid');
@@ -136,6 +136,7 @@ function displayKids(kids) {
     profileList.appendChild(kidItem);  // Ajouter à la liste
   });
 }
+
 
 // Fonction pour activer ou désactiver un enfant
 async function toggleKidActivation(kidId, isActive) {

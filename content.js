@@ -165,7 +165,7 @@ function blockPost(post) {
     blockOverlay.style.display = 'flex';
     blockOverlay.style.alignItems = 'center';
     blockOverlay.style.justifyContent = 'center';
-    blockOverlay.style.color = 'white';
+    blockOverlay.style.color = 'red';
     blockOverlay.style.fontSize = '20px';
     blockOverlay.style.fontWeight = 'bold';
     blockOverlay.innerText = 'Publication bloquée';
