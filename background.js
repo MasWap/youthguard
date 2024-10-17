@@ -1,7 +1,8 @@
 let timeSpent = {};
-let MAX_TIME = 60 * 60 * 1000; // 1 heure en millisecondes
 let currentInterval = null;
 let currentDomain = null;
+let currentMaxTime = 3600; // Valeur par défaut (1 heure en secondes)
+let currentKidId = null; // ID de l'enfant actif
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete') {
@@ -18,10 +19,36 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 function updateTimer(url) {
   const domain = new URL(url).hostname;
   if (["www.facebook.com", "www.instagram.com", "www.tiktok.com"].includes(domain)) {
-    startTimer(domain);
+    fetchActiveKid().then(kid => {
+      if (kid) {
+        currentMaxTime = kid.max_time; // Mettez à jour le temps maximum avec l'attribut max_time de l'enfant actif
+        currentKidId = kid.id; // Mettez à jour l'ID de l'enfant actif
+        startTimer(domain);
+      } else {
+        console.error('Aucun enfant actif trouvé.');
+      }
+    }).catch(error => {
+      console.error('Erreur lors de la récupération de l\'enfant actif:', error);
+    });
   } else {
     stopTimer();
   }
+}
+
+function fetchActiveKid() {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/kids') // Récupérer tous les enfants
+      .then(response => response.json())
+      .then(kids => {
+        // Trouver l'enfant actif
+        const activeKid = kids.find(kid => kid.is_active === 1); // Vérifiez ici
+        resolve(activeKid); // Renvoyer l'enfant actif ou undefined
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des enfants:', error);
+        reject(error);
+      });
+  });
 }
 
 function startTimer(domain) {
@@ -33,11 +60,11 @@ function startTimer(domain) {
   }
 
   currentInterval = setInterval(() => {
-    timeSpent[domain] += 1000;
+    timeSpent[domain] += 1; // Incrémentez le temps en secondes
     saveTimeSpent();
     updateContentScript();
 
-    if (timeSpent[domain] >= MAX_TIME) {
+    if (timeSpent[domain] >= currentMaxTime) {
       chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
         if (tabs[0]) {
           chrome.tabs.update(tabs[0].id, {url: "blocked.html"});
@@ -50,36 +77,21 @@ function startTimer(domain) {
 
 function updateContentScript() {
   if (currentDomain) {
-    const remainingTime = Math.max(0, (MAX_TIME - timeSpent[currentDomain]) / 1000);
+    const remainingTime = Math.max(0, currentMaxTime - timeSpent[currentDomain]);
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       if (tabs[0]) {
         chrome.tabs.sendMessage(tabs[0].id, {
           action: "updateTimer",
-          remainingTime: remainingTime
+          remainingTime: remainingTime,
+          kidId: currentKidId // Envoyer l'ID de l'enfant actif
         }, (response) => {
           if (chrome.runtime.lastError) {
-            // Gérer l'erreur silencieusement
             console.log("Impossible de mettre à jour le timer : ", chrome.runtime.lastError.message);
-            // Optionnel : Vous pouvez essayer de réinjecter le content script ici si nécessaire
-            // injectContentScript(tabs[0].id);
           }
         });
       }
     });
   }
-}
-
-function injectContentScript(tabId) {
-  chrome.scripting.executeScript({
-    target: { tabId: tabId },
-    files: ['content.js']
-  }, () => {
-    if (chrome.runtime.lastError) {
-      console.log("Erreur lors de l'injection du content script : ", chrome.runtime.lastError.message);
-    } else {
-      console.log("Content script réinjecté avec succès");
-    }
-  });
 }
 
 function stopTimer() {

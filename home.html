@@ -9,39 +9,24 @@
 <body>
   <div class="container">
     <div class="header">
-      <h2>Mes Profils</h2>
-      <button id="addProfile">Ajouter un profil</button>
+      <h2>Mes Enfants</h2>
+      <button id="addKid">Ajouter un enfant</button>
     </div>
 
     <ul class="profile-list">
-      <li class="profile-item">
-        <span>Clément</span>
-        <label class="switch">
-          <input type="checkbox" class="profile-switch">
-          <span class="slider round"></span>
-        </label>
-        <span class="arrow">&#9654;</span>
-      </li>
-      <li class="profile-item">
-        <span>Thomas</span>
-        <label class="switch">
-          <input type="checkbox" class="profile-switch">
-          <span class="slider round"></span>
-        </label>
-        <span class="arrow">&#9654;</span>
-      </li>
+      <!-- Les enfants seront ajoutés ici dynamiquement -->
     </ul>
   </div>
 
-  <!-- Popup pour ajouter un profil -->
-  <div id="profileModal" class="modal">
+  <!-- Popup pour ajouter un enfant -->
+  <div id="kidModal" class="modal">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h3>Ajouter un nouveau profil</h3>
-      <input type="text" id="newProfileName" placeholder="Nom du profil">
+      <span class="close-kid-btn">&times;</span>
+      <h3>Ajouter un nouvel enfant</h3>
+      <input type="text" id="newKidName" placeholder="Nom de l'enfant">
       <div class="modal-actions">
-        <button id="saveProfile">Ajouter</button>
-        <button id="cancelProfile">Annuler</button>
+        <button id="saveKid">Ajouter</button>
+        <button id="cancelKid">Annuler</button>
       </div>
     </div>
   </div>

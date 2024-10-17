@@ -39,19 +39,16 @@ async function checkCanRegister() {
 function updateUIBasedOnLoginStatus(isLoggedIn) {
   console.log('Updating UI, isLoggedIn:', isLoggedIn);
   const loginForm = document.getElementById('loginForm');
-  const logoutButton = document.getElementById('logoutButton');
   const showUsersButton = document.getElementById('showUsersButton');
   const userListElement = document.getElementById('userList');
   const registerButton = document.getElementById('registerButton');
 
   if (isLoggedIn) {
     loginForm.style.display = 'none';
-    logoutButton.style.display = 'block';
     showUsersButton.style.display = 'block';
     document.getElementById('loginStatus').textContent = "Connecté en tant que " + getUsername();
   } else {
     loginForm.style.display = 'block';
-    logoutButton.style.display = 'none';
     showUsersButton.style.display = 'none';
     userListElement.style.display = 'none';
     userListElement.innerHTML = '';
@@ -147,6 +144,10 @@ document.getElementById('registerButton').addEventListener('click', async () => 
   }
 });
 
+document.getElementById('registerButton').addEventListener('click', function() {
+  window.location.href = 'register.html';  // Redirige vers la page d'inscription
+});
+
 // Bouton de déconnexion (Logout)
 function logout() {
   console.log('Logout function called');
@@ -225,7 +226,6 @@ async function deleteUser(event) {
 
 // Ajouter un écouteur d'événements pour le bouton d'affichage des utilisateurs
 document.getElementById('showUsersButton').addEventListener('click', displayUsers);
-document.getElementById('logoutButton').addEventListener('click', logout);
 
 // Vérification de l'état de connexion lors de l'ouverture du popup
 document.addEventListener('DOMContentLoaded', () => {

@@ -10,26 +10,41 @@
   <div class="container">
     <div class="header">
       <button id="backToHome" class="back-btn">&#9664;</button> <!-- Flèche gauche -->
-      <h2 id="profileName">Nom du Profil</h2>
+      <h2 id="profileName"><strong>Nom du Profil</strong></h2>
       <button id="deleteProfile" class="delete-btn">&#128465;</button> <!-- Poubelle -->
+    </div>
+
+    <!-- Champ pour modifier le nom d'utilisateur -->
+    <div class="field">
+      <label for="username"><strong>Nom d'utilisateur</strong></label>
+      <input type="text" id="username" name="username" required>
     </div>
 
     <!-- Sélecteur de date de naissance -->
     <div class="field">
-      <label for="dob">Date de naissance</label>
+      <label for="dob"><strong>Date de naissance</strong></label>
       <input type="date" id="dob" name="dob">
     </div>
 
-    <!-- Input pour bannir des tags -->
+    <!-- Liste des tags avec checkboxes -->
     <div class="field">
-      <label for="bannedTags">Tags à bannir</label>
-      <input type="text" id="bannedTags" placeholder="Ajouter des tags séparés par des virgules">
+      <label><strong>Tags à bannir</strong></label>
+      <div id="tagList" class="tag-list">
+        <!-- Les checkboxes seront ajoutées dynamiquement ici -->
+      </div>
+      <a href="manage-tags.html" class="add-tag-link">Ajouter</a> <!-- Lien pour ajouter des tags -->
+    </div>
+
+    <!-- Afficher le statut de l'enfant -->
+    <div class="field">
+      <label><strong>Statut</strong></label>
+      <p id="isActive"></p>
     </div>
 
     <!-- Sélecteur de temps pour limiter l'usage des réseaux sociaux -->
     <div class="field">
-      <label for="timeLimit">Temps de visionnage des réseaux sociaux (heures/minutes)</label>
-      <input type="time" id="timeLimit" name="timeLimit" min="00:00" max="24:00" required>
+      <label for="maxTime"><strong>Temps maximum (HH:MM)</strong></label>
+      <input type="time" id="maxTimeInput" name="maxTimeInput" required>
     </div>
 
     <button id="saveProfile" class="save-btn">Sauvegarder</button>
