@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "TimeGuard",
+  "name": "YouthGuard",
   "version": "1.0",
   "description": "Limit the time spent on social media and adapt based on age verification.",
   "permissions": [

@@ -41,30 +41,6 @@ function createBlockElement() {
   document.body.appendChild(blockElement);
 }
 
-function createResetButton() {
-  resetButton = document.createElement('button');
-  resetButton.textContent = 'Réinitialiser le temps';
-  resetButton.style.cssText = `
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    padding: 10px;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 9999;
-  `;
-  
-  resetButton.addEventListener('click', () => {
-    // Logique pour réinitialiser le temps
-    chrome.runtime.sendMessage({ action: "resetTimer" });
-  });
-
-  document.body.appendChild(resetButton);
-}
-
 function updateTimer(remainingTime) {
   if (!timerElement) {
     createTimerElement();
@@ -237,4 +213,3 @@ filterPosts();
 
 createTimerElement();
 createBlockElement();
-createResetButton();
